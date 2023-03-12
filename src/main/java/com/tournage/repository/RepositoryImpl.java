@@ -1,23 +1,34 @@
 package com.tournage.repository;
 
-import com.tournage.models.Brother;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
+@org.springframework.stereotype.Repository
 public class RepositoryImpl<T> implements Repository<T>{
     protected SessionFactory sessionFactory;
     private Class<T> entityType;
 
     public RepositoryImpl() {
-        System.out.println(this.getClass().getTypeParameters()[0]);
+
     }
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public Class<T> getEntityType(){
+        if (entityType == null){
+            Type genericSuperclass = getClass().getGenericSuperclass();
+            this.entityType = (Class<T>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
+        }
+        return this.entityType;
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
@@ -27,15 +38,17 @@ public class RepositoryImpl<T> implements Repository<T>{
     @Override
     public List<T> findAll() {
         Session session = sessionFactory.openSession();
-//        Criteria criteria = session.createCriteria();
+        Criteria criteria = session.createCriteria(this.getEntityType());
+        List<T> result = criteria.list();
+        session.close();
 
-        return null;
+        return result;
     }
 
     @Override
     public T findById(Serializable id) {
         Session session = sessionFactory.openSession();
-        T result = session.get(entityType, id);
+        T result = session.get(this.getEntityType(), id);
         session.close();
         return result;
     }
@@ -50,6 +63,6 @@ public class RepositoryImpl<T> implements Repository<T>{
     }
 
     public static void main(String[] args) {
-        RepositoryImpl<Brother> repository = new RepositoryImpl<>();
+        RepositoryImpl<String> repository = new RepositoryImpl<>();
     }
 }
