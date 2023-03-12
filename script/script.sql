@@ -4,22 +4,22 @@ CREATE database tournage;
 
 CREATE  TABLE actions (
 	id                   serial  NOT NULL  ,
-	idscene              integer    ,
-	idacteur             integer    ,
+	idScene              integer    ,
+	idActeur             integer    ,
 	duree                time    ,
 	temps                time    ,
 	dialogue             text    ,
 	CONSTRAINT pk_actions PRIMARY KEY ( id ),
-	CONSTRAINT unq_actions_idscene UNIQUE ( idscene ) ,
-	CONSTRAINT unq_actions_idacteur UNIQUE ( idacteur ) 
+	CONSTRAINT unq_actions_idscene UNIQUE ( idScene ) ,
+	CONSTRAINT unq_actions_idacteur UNIQUE ( idActeur )
  );
 
 CREATE  TABLE scene (
 	id                   serial  NOT NULL  ,
-	idplateau            integer    ,
+	idPlateau            integer    ,
 	CONSTRAINT pk_scen PRIMARY KEY ( id ),
-	CONSTRAINT unq_scene_idplateau UNIQUE ( idplateau ) ,
-	CONSTRAINT fk_scene_actions FOREIGN KEY ( id ) REFERENCES actions( idscene )
+	CONSTRAINT unq_scene_idplateau UNIQUE ( idPlateau ) ,
+	CONSTRAINT fk_scene_actions FOREIGN KEY ( id ) REFERENCES actions( idScene )
  );
 
 CREATE  TABLE acteur (
@@ -29,7 +29,7 @@ CREATE  TABLE acteur (
 	surnom               varchar(50)    ,
 	prenom               varchar(30)    ,
 	CONSTRAINT pk_acteur PRIMARY KEY ( id ),
-	CONSTRAINT fk_acteur_actions FOREIGN KEY ( id ) REFERENCES actions( idacteur )
+	CONSTRAINT fk_acteur_actions FOREIGN KEY ( id ) REFERENCES actions( idActeur )
  );
 
 CREATE  TABLE plateau (
@@ -37,5 +37,5 @@ CREATE  TABLE plateau (
 	nom                  varchar(30)    ,
 	lieu                 varchar(50)    ,
 	CONSTRAINT pk_plateau PRIMARY KEY ( id ),
-	CONSTRAINT fk_plateau_scene FOREIGN KEY ( id ) REFERENCES scene( idplateau )
+	CONSTRAINT fk_plateau_scene FOREIGN KEY ( id ) REFERENCES scene( idPlateau )
  );
