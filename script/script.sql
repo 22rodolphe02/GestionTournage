@@ -1,6 +1,8 @@
-CREATE SCHEMA IF NOT EXISTS tournage;
+CREATE database tournage;
 
-CREATE  TABLE tournage.actions ( 
+\c tournage;
+
+CREATE  TABLE actions (
 	id                   serial  NOT NULL  ,
 	idscene              integer    ,
 	idacteur             integer    ,
@@ -12,28 +14,28 @@ CREATE  TABLE tournage.actions (
 	CONSTRAINT unq_actions_idacteur UNIQUE ( idacteur ) 
  );
 
-CREATE  TABLE tournage.scene ( 
+CREATE  TABLE scene (
 	id                   serial  NOT NULL  ,
 	idplateau            integer    ,
 	CONSTRAINT pk_scen PRIMARY KEY ( id ),
 	CONSTRAINT unq_scene_idplateau UNIQUE ( idplateau ) ,
-	CONSTRAINT fk_scene_actions FOREIGN KEY ( id ) REFERENCES tournage.actions( idscene )   
+	CONSTRAINT fk_scene_actions FOREIGN KEY ( id ) REFERENCES actions( idscene )
  );
 
-CREATE  TABLE tournage.acteur ( 
+CREATE  TABLE acteur (
 	id                   serial  NOT NULL  ,
 	nom                  varchar(30)    ,
 	age                  integer    ,
 	surnom               varchar(50)    ,
 	prenom               varchar(30)    ,
 	CONSTRAINT pk_acteur PRIMARY KEY ( id ),
-	CONSTRAINT fk_acteur_actions FOREIGN KEY ( id ) REFERENCES tournage.actions( idacteur )   
+	CONSTRAINT fk_acteur_actions FOREIGN KEY ( id ) REFERENCES actions( idacteur )
  );
 
-CREATE  TABLE tournage.plateau ( 
+CREATE  TABLE plateau (
 	id                   serial  NOT NULL  ,
 	nom                  varchar(30)    ,
 	lieu                 varchar(50)    ,
 	CONSTRAINT pk_plateau PRIMARY KEY ( id ),
-	CONSTRAINT fk_plateau_scene FOREIGN KEY ( id ) REFERENCES tournage.scene( idplateau )   
+	CONSTRAINT fk_plateau_scene FOREIGN KEY ( id ) REFERENCES scene( idplateau )
  );
